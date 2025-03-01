@@ -4,38 +4,27 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
 import { Salon } from './salon.entity';
+import { Pais } from './pais.entity';
 
-@Entity()
+@Entity({ name: 'UBICACION' })
 export class Ubicacion {
-  @PrimaryGeneratedColumn({
-    primaryKeyConstraintName: 'pk_ubicacion',
-    comment: 'Clave primaria de la Ubicación',
-  })
+  @PrimaryGeneratedColumn({ name: 'PK_UBICACION', comment: 'Clave primaria de la Ubicación' })
   pk_ubicacion: number;
 
-  @Column({
-    type: 'nvarchar',
-    length: 50,
-    nullable: false,
-    comment: 'Nombre de la Ubicación',
-  })
+  @Column({ name: 'NOMBRE', type: 'nvarchar', length: 50, nullable: false, comment: 'Nombre de la Ubicación' })
   nombre: string;
 
-  @OneToOne(() => Ubicacion, (ubicacion) => ubicacion.pais)
+  @ManyToOne(() => Pais, (pais) => pais.ubicaciones, { nullable: true })
   @JoinColumn({
-    name: 'fk_pais',
-    referencedColumnName: 'pk_ubicacion',
-    foreignKeyConstraintName: 'fk_salon_ubicacion',
+    name: 'FK_PAIS',
+    referencedColumnName: 'PK_PAIS',
+    foreignKeyConstraintName: 'FK_UBICACION_PAIS',
   })
-  pais: Ubicacion;
-
-  @ManyToOne(() => Salon, (salon) => salon.ubicacion)
-  ubicaciones: Ubicacion[];
+  pais: Pais;
 
   @OneToMany(() => Salon, (salon) => salon.ubicacion)
   salones: Salon[];
