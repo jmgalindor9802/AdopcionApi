@@ -1,3 +1,4 @@
+import { Clase } from 'src/classes/entities/clase.entity';
 import { Estudiante } from 'src/users/entities/estudiante.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -11,4 +12,7 @@ export class Pais {
 
   @OneToMany(() => Estudiante, (estudiante) => estudiante.fk_pais)
   estudiantes: Estudiante[];
+  
+  @OneToMany(() => Clase, (clase) => clase.pais_orden_venta)
+  clases: Clase[];
 }

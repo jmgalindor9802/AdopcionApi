@@ -1,60 +1,70 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
-
-import { Estudiante } from '../../usuario/entities/estudiante.entity';
-import { Empresa } from './empresa.entity';
+import { Estudiante } from '../../users/entities/estudiante.entity';
+import { Empresa } from '../../companies/entities/empresa.entity';
 import { Grupo } from './grupo.entity';
+import { Pais } from '../../places/entities/pais.entity';
 
-@Entity()
+@Entity({ name: 'CLASE' })
 export class Clase {
   @PrimaryColumn({
-    name: 'pfk_estudiante',
-    primaryKeyConstraintName: 'pk_clase',
-    foreignKeyConstraintName: 'fk_clase_estudiante',
+    name: 'PFK_ESTUDIANTE',
+    primaryKeyConstraintName: 'PK_CLASE',
   })
   pfk_estudiante: number;
 
   @PrimaryColumn({
-    name: 'pfk_grupo',
-    primaryKeyConstraintName: 'pk_clase',
-    generated: 'increment',
-    foreignKeyConstraintName: 'fk_clase_grupo',
+    name: 'PFK_GRUPO',
+    primaryKeyConstraintName: 'PK_CLASE',
   })
   pfk_grupo: number;
 
   @ManyToOne(() => Estudiante, (estudiante) => estudiante.clases)
-  // @JoinColumn({
-  //   name: 'pfk_estudiante',
-  //   referencedColumnName: 'pk_estudiante',
-  //   foreignKeyConstraintName: 'fk_clase_estudiante',
-  // })
+  @JoinColumn({
+    name: 'PFK_ESTUDIANTE',
+    referencedColumnName: 'PK_ESTUDIANTE',
+    foreignKeyConstraintName: 'FK_CLASE_ESTUDIANTE',
+  })
   estudiante: Estudiante;
+
   @ManyToOne(() => Grupo, (grupo) => grupo.clases)
-  // @JoinColumn({
-  //   name: 'pfk_grupo',
-  //   referencedColumnName: 'pk_grupo',
-  //   foreignKeyConstraintName: 'fk_clase_grupo',
-  // })
+  @JoinColumn({
+    name: 'PFK_GRUPO',
+    referencedColumnName: 'PK_GRUPO',
+    foreignKeyConstraintName: 'FK_CLASE_GRUPO',
+  })
   grupo: Grupo;
-  @Column({ type: 'nvarchar', length: 50 })
+
+  @Column({ name: 'ESTADO_ENCUESTA', type: 'nvarchar', length: 50, nullable: false })
   estado_encuesta: string;
-  @Column({ type: 'nvarchar', length: 50 })
+
+  @Column({ name: 'ESTADO_MATERIAL', type: 'nvarchar', length: 50, nullable: false })
   estado_material: string;
-  @Column({ type: 'nvarchar', length: 50 })
+
+  @Column({ name: 'ESTADO_CERTIFICADO', type: 'nvarchar', length: 50, nullable: false })
   estado_certificado: string;
-  @Column({ type: 'nvarchar', length: 50, nullable: true })
+
+  @Column({ name: 'ORDEN_VENTA', type: 'nvarchar', length: 50, nullable: true })
   orden_venta: string;
-  @Column({ type: 'nvarchar', length: 50, nullable: true })
-  pais_orden_venta: string;
-  @Column('numeric', { precision: 5, scale: 2, nullable: true })
+
+  @Column({ name: 'CALIFICACION', type: 'numeric', precision: 5, scale: 2, nullable: true })
   calificacion: number;
-  @Column({ type: 'date', nullable: true })
+
+  @Column({ name: 'FECHA', type: 'date', nullable: true })
   fecha: Date;
 
   @ManyToOne(() => Empresa, (empresa) => empresa.clases)
   @JoinColumn({
-    name: 'fk_empresa',
-    referencedColumnName: 'pk_empresa',
-    foreignKeyConstraintName: 'fk_clase_empresa',
+    name: 'FK_EMPRESA',
+    referencedColumnName: 'PK_EMPRESA',
+    foreignKeyConstraintName: 'FK_CLASE_EMPRESA',
   })
   empresa: Empresa;
+
+  @ManyToOne(() => Pais, (pais) => pais.clases)
+  @JoinColumn({
+    name: 'FK_PAIS_ORDEN_VENTA',
+    referencedColumnName: 'PK_PAIS',
+    foreignKeyConstraintName: 'FK_CLASE_PAIS',
+  })
+  pais_orden_venta: Pais;
 }
