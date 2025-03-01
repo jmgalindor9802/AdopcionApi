@@ -2,52 +2,51 @@ import {
   Entity,
   Check,
   Column,
+  ManyToOne,
   OneToMany,
   JoinColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { Grupo } from './grupo.entity';
+import { Grupo } from '../../classes/entities/grupo.entity';
 import { Ubicacion } from './ubicacion.entity';
 
-@Entity()
-@Check('ck_estado_salon', `"estado"='Deshabilitado' OR "estado"="Habilitado"`)
+@Entity({ name: 'SALON' })
+@Check('CK_ESTADO_SALON', `ESTADO = 'Deshabilitado' OR ESTADO = 'Habilitado'`)
+@Check('CK_CAPACIDAD', 'CAPACIDAD > 0')
 export class Salon {
-  @PrimaryGeneratedColumn({ comment: 'Clave primaria del Salon' })
+  @PrimaryGeneratedColumn({ name: 'PK_SALON', comment: 'Clave primaria del Salón' })
   pk_salon: number;
-  @Column({
-    type: 'nvarchar',
-    length: 100,
-    comment: 'Nombre del Salon',
-  })
+
+  @Column({ name: 'NOMBRE', type: 'nvarchar', length: 100, nullable: false, comment: 'Nombre del Salón' })
   nombre: string;
-  @Column({ type: 'nvarchar', length: 80, comment: 'Ludar del Salon' })
+
+  @Column({ name: 'LUGAR', type: 'nvarchar', length: 80, nullable: false, comment: 'Lugar del Salón' })
   lugar: string;
-  @Column({
-    type: 'nvarchar',
-    length: 100,
-    nullable: true,
-    comment: 'Dirección del Salón',
-  })
+
+  @Column({ name: 'DIRECCION', type: 'nvarchar', length: 100, nullable: true, comment: 'Dirección del Salón' })
   direccion: string;
+
   @Column({
+    name: 'ESTADO',
     type: 'nvarchar',
     length: 50,
-    comment:
-      "Si el estado es 'Habilitado' el Salon se podrá asignar a un Grupo",
+    nullable: false,
+    comment: "Si el estado es 'Habilitado' el Salón se podrá asignar a un Grupo",
   })
   estado: string;
-  @Column({ type: 'int', comment: '' })
+
+  @Column({ name: 'CAPACIDAD', type: 'int', nullable: false, comment: 'Capacidad del Salón' })
   capacidad: number;
 
-  @OneToMany(() => Ubicacion, (ubicacion) => ubicacion.salones)
+  @ManyToOne(() => Ubicacion, (ubicacion) => ubicacion.salones)
   @JoinColumn({
-    name: 'fk_ubicacion',
-    referencedColumnName: 'pk_ubicacion',
-    foreignKeyConstraintName: 'fk_salon_ubicacion',
+    name: 'FK_UBICACION',
+    referencedColumnName: 'PK_UBICACION',
+    foreignKeyConstraintName: 'FK_SALON_UBICACION',
   })
   ubicacion: Ubicacion;
 
-  @OneToMany(() => Grupo, (grupo) => grupo.curso)
+  @OneToMany(() => Grupo, (grupo) => grupo.salon)
   grupos: Grupo[];
 }
