@@ -1,42 +1,32 @@
 import { Check, Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'ADMINISTRADOR' }) // Nombre exacto de la tabla en la BD
 export class Administrador {
   @PrimaryGeneratedColumn('increment', {
-    primaryKeyConstraintName: 'pk_administrador',
+    primaryKeyConstraintName: 'PK_ADMINISTRADOR',
     comment: 'Clave primaria de la tabla Administrador',
   })
   pk_administrador: number;
-  @Column({ type: 'nvarchar', length: 50, comment: 'Nombre del Administrador' })
+
+  @Column({ type: 'nvarchar', length: 50, nullable: false, comment: 'Nombre del Administrador' })
   nombre: string;
-  @Column({
-    type: 'nvarchar',
-    length: 50,
-    comment: 'Apellido del Administrador',
-  })
+
+  @Column({ type: 'nvarchar', length: 50, nullable: false, comment: 'Apellido del Administrador' })
   apellido: string;
-  @Column({
-    type: 'nvarchar',
-    length: 100,
-    comment: 'Correo del Administrador',
-  })
+
+  @Column({ type: 'nvarchar', length: 100, nullable: false, comment: 'Correo del Administrador' })
   correo: string;
-  @Column({
-    type: 'nvarchar',
-    length: 50,
-    comment: 'Usuario de la cuenta Agol del Administrador',
-  })
+
+  @Column({ type: 'nvarchar', length: 50, nullable: false, comment: 'Usuario de la cuenta Agol del Administrador' })
   usuario: string;
+
   @Column({
     type: 'nvarchar',
     length: 50,
-    default: 'Deshabilitado',
-    comment:
-      "Si el Estado es 'Habilitado' podra acceder a todas las funcionalidades de un Administrador",
+    nullable: false,
+    default: 'Deshabilitado', // Se mantiene el valor por defecto
+    comment: "Si el Estado es 'Habilitado' podrá acceder a todas las funcionalidades de un Administrador",
   })
-  @Check(
-    'CHK_ESTADO_ADMINISTRADOR',
-    "estado='Habilitado' OR estado='Deshabilitado'",
-  )
+  @Check('CHK_ESTADO_ADMINISTRADOR', "estado='Habilitado' OR estado='Deshabilitado'")
   estado: string;
 }
