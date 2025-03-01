@@ -13,6 +13,7 @@ import { Clase } from './clase.entity';
 import { Curso } from './curso.entity';
 import { Horario } from './horario.entity';
 import { Salon } from './salon.entity';
+import { Encuesta } from 'src/surveys/entities/encuesta.entity';
 // import { Tipo_Grupo } from './tipo_grupo.entity';
 
 @Entity()
@@ -61,6 +62,9 @@ export class Grupo {
 
   @OneToMany(() => Clase, (clase) => clase.grupo)
   clases: Clase[];
+
+  @OneToMany(() => Encuesta, (encuesta) => encuesta.grupo)
+  encuestas: Encuesta[];
 
   // @ManyToOne(() => Tipo_Grupo, (tipoGrupo) => tipoGrupo.grupos)
   // @JoinColumn({

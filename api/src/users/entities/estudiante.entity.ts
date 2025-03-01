@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { Clase } from '../../classes/entities/clase.entity';
 import { Pais } from '../../places/entities/pais.entity';
+import { Encuesta } from 'src/surveys/entities/encuesta.entity';
 
 @Entity({ name: 'ESTUDIANTE' }) 
 export class Estudiante {
@@ -51,4 +52,7 @@ export class Estudiante {
 
   @OneToMany(() => Clase, (clase) => clase.estudiante)
   clases: Clase[];
+  
+  @OneToMany(() => Encuesta, (encuesta) => encuesta.estudiante)
+  encuestas: Encuesta[];
 }
