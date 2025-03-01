@@ -27,7 +27,7 @@ export class Horario {
   @ManyToOne(() => Grupo, (grupo) => grupo.horarios)
   @JoinColumn({
     name: 'FK_GRUPO',
-    referencedColumnName: 'PK_GRUPO',
+    referencedColumnName: 'pk_grupo',
     foreignKeyConstraintName: 'FK_HORARIO_GRUPO',
   })
   grupo: Grupo;

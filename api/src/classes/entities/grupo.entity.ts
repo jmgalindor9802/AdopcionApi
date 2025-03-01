@@ -38,7 +38,7 @@ export class Grupo {
   @ManyToOne(() => Curso, (curso) => curso.grupos)
   @JoinColumn({
     name: 'FK_CURSO',
-    referencedColumnName: 'PK_CURSO',
+    referencedColumnName: 'pk_curso',
     foreignKeyConstraintName: 'FK_GRUPO_CURSO',
   })
   curso: Curso;
@@ -46,7 +46,7 @@ export class Grupo {
   @ManyToOne(() => Salon, (salon) => salon.grupos)
   @JoinColumn({
     name: 'FK_SALON',
-    referencedColumnName: 'PK_SALON',
+    referencedColumnName: 'pk_salon',
     foreignKeyConstraintName: 'FK_GRUPO_SALON',
   })
   salon: Salon;
@@ -54,7 +54,7 @@ export class Grupo {
   @ManyToOne(() => Instructor, (instructor) => instructor.grupos)
   @JoinColumn({
     name: 'FK_INSTRUCTOR',
-    referencedColumnName: 'PK_INSTRUCTOR',
+    referencedColumnName: 'pk_instructor',
     foreignKeyConstraintName: 'FK_GRUPO_INSTRUCTOR',
   })
   instructor: Instructor;
@@ -62,7 +62,7 @@ export class Grupo {
   @ManyToOne(() => TipoGrupo, (tipoGrupo) => tipoGrupo.grupos)
   @JoinColumn({
     name: 'FK_TIPO_GRUPO',
-    referencedColumnName: 'PK_TIPO_GRUPO',
+    referencedColumnName: 'pk_tipo_grupo',
     foreignKeyConstraintName: 'FK_GRUPO_TIPO_GRUPO',
   })
   tipo_grupo: TipoGrupo;

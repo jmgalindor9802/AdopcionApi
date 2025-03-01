@@ -21,7 +21,7 @@ export class Clase {
   @ManyToOne(() => Estudiante, (estudiante) => estudiante.clases)
   @JoinColumn({
     name: 'PFK_ESTUDIANTE',
-    referencedColumnName: 'PK_ESTUDIANTE',
+    referencedColumnName: 'pk_estudiante',
     foreignKeyConstraintName: 'FK_CLASE_ESTUDIANTE',
   })
   estudiante: Estudiante;
@@ -29,7 +29,7 @@ export class Clase {
   @ManyToOne(() => Grupo, (grupo) => grupo.clases)
   @JoinColumn({
     name: 'PFK_GRUPO',
-    referencedColumnName: 'PK_GRUPO',
+    referencedColumnName: 'pk_grupo',
     foreignKeyConstraintName: 'FK_CLASE_GRUPO',
   })
   grupo: Grupo;
@@ -55,7 +55,7 @@ export class Clase {
   @ManyToOne(() => Empresa, (empresa) => empresa.clases)
   @JoinColumn({
     name: 'FK_EMPRESA',
-    referencedColumnName: 'PK_EMPRESA',
+    referencedColumnName: 'pk_empresa',
     foreignKeyConstraintName: 'FK_CLASE_EMPRESA',
   })
   empresa: Empresa;
@@ -63,7 +63,7 @@ export class Clase {
   @ManyToOne(() => Pais, (pais) => pais.clases)
   @JoinColumn({
     name: 'FK_PAIS_ORDEN_VENTA',
-    referencedColumnName: 'PK_PAIS',
+    referencedColumnName: 'pk_pais',
     foreignKeyConstraintName: 'FK_CLASE_PAIS',
   })
   pais_orden_venta: Pais;

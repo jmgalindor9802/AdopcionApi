@@ -42,7 +42,7 @@ export class Salon {
   @ManyToOne(() => Ubicacion, (ubicacion) => ubicacion.salones)
   @JoinColumn({
     name: 'FK_UBICACION',
-    referencedColumnName: 'PK_UBICACION',
+    referencedColumnName: 'pk_ubicacion',
     foreignKeyConstraintName: 'FK_SALON_UBICACION',
   })
   ubicacion: Ubicacion;
