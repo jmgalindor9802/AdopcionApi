@@ -7,30 +7,29 @@ import {
 } from 'typeorm';
 
 import { Estudiante } from '../../users/entities/estudiante.entity';
-import { Clase } from '../../classes/entities/clase.entity';
 import { Grupo } from '../../classes/entities/grupo.entity';
 
-@Entity()
+@Entity({ name: 'CERTIFICADO' }) 
 export class Certificado {
-  @PrimaryGeneratedColumn({ comment: 'Clave primaria del Certificado' })
+  @PrimaryGeneratedColumn({ name: 'PK_CERTIFICADO', comment: 'Clave primaria del Certificado' })
   pk_certificado: number;
 
-  @Column({ type: 'date', comment: 'Fecha de expedición del certificado' })
+  @Column({ type: 'date', nullable: false, comment: 'Fecha de expedición del certificado' })
   fecha: Date;
 
-  @ManyToOne(() => Clase, (clase) => clase.grupo)
+  @ManyToOne(() => Grupo, { nullable: false })
   @JoinColumn({
-    name: 'fk_grupo',
-    referencedColumnName: 'pfk_grupo',
-    foreignKeyConstraintName: 'fk_certificado_clase',
+    name: 'FK_GRUPO',
+    referencedColumnName: 'pk_grupo', 
+    foreignKeyConstraintName: 'FK_CERTIFICADO_GRUPO',
   })
   grupo: Grupo;
 
-  @ManyToOne(() => Clase, (clase) => clase.estudiante)
+  @ManyToOne(() => Estudiante, { nullable: false })
   @JoinColumn({
-    name: 'fk_estudiante',
-    referencedColumnName: 'pfk_estudiante',
-    foreignKeyConstraintName: 'fk_certificado_clase',
+    name: 'FK_ESTUDIANTE',
+    referencedColumnName: 'pk_estudiante', 
+    foreignKeyConstraintName: 'FK_CERTIFICADO_ESTUDIANTE',
   })
   estudiante: Estudiante;
 }
