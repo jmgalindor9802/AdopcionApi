@@ -7,42 +7,43 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { Clase } from './clase.entity';
+import { Clase } from '../../classes/entities/clase.entity';
 import { Sector } from './sector.entity';
+import { Pais } from '../../places/entities/pais.entity';
 
-@Entity()
+@Entity({ name: 'EMPRESA' })
 export class Empresa {
-  @PrimaryGeneratedColumn({ comment: 'Clave primaria de la Empresa' })
+  @PrimaryGeneratedColumn({ name: 'PK_EMPRESA', comment: 'Clave primaria de la Empresa' })
   pk_empresa: number;
-  @Column({ type: 'nvarchar', length: 100, comment: 'Nombre de la Empresa' })
+
+  @Column({ name: 'NOMBRE', type: 'nvarchar', length: 200, comment: 'Nombre de la Empresa' })
   nombre: string;
-  @Column({
-    type: 'nvarchar',
-    length: 20,
-    nullable: true,
-    comment: 'NIT de la Empresa',
-  })
+
+  @Column({ name: 'NIT', type: 'nvarchar', length: 25, nullable: true, comment: 'NIT de la Empresa' })
   nit: string;
+
   @Column({
-    type: 'nvarchar',
-    length: 50,
-    nullable: true,
-    comment: 'Pais de la Empresa',
-  })
-  pais: string;
-  @Column({
+    name: 'CUSTOMER_NUMBER',
     type: 'int',
-    comment: 'Numero del cliente proveniente de la Tabla Esri_Academy',
+    comment: 'Número del cliente proveniente de la tabla Esri_Academy',
   })
   customer_number: number;
 
   @ManyToOne(() => Sector, (sector) => sector.empresas)
   @JoinColumn({
-    name: 'fk_sector',
-    referencedColumnName: 'pk_sector',
-    foreignKeyConstraintName: 'fk_empresa_sector',
+    name: 'FK_SECTOR',
+    referencedColumnName: 'PK_SECTOR',
+    foreignKeyConstraintName: 'FK_EMPRESA_SECTOR',
   })
   sector: Sector;
+
+  @ManyToOne(() => Pais, (pais) => pais.empresas)
+  @JoinColumn({
+    name: 'FK_PAIS',
+    referencedColumnName: 'PK_PAIS',
+    foreignKeyConstraintName: 'FK_EMPRESA_PAIS',
+  })
+  pais: Pais;
 
   @OneToMany(() => Clase, (clase) => clase.empresa)
   clases: Clase[];
