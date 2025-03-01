@@ -1,6 +1,6 @@
 import { Check, Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
-@Entity({ name: 'ADMINISTRADOR' }) // Nombre exacto de la tabla en la BD
+@Entity({ name: 'ADMINISTRADOR' }) 
 export class Administrador {
   @PrimaryGeneratedColumn('increment', {
     primaryKeyConstraintName: 'PK_ADMINISTRADOR',
@@ -24,7 +24,7 @@ export class Administrador {
     type: 'nvarchar',
     length: 50,
     nullable: false,
-    default: 'Deshabilitado', // Se mantiene el valor por defecto
+    default: 'Deshabilitado', 
     comment: "Si el Estado es 'Habilitado' podrá acceder a todas las funcionalidades de un Administrador",
   })
   @Check('CHK_ESTADO_ADMINISTRADOR', "estado='Habilitado' OR estado='Deshabilitado'")

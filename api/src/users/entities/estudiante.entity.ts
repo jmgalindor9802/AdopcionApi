@@ -10,7 +10,7 @@ import {
 import { Clase } from '../../classes/entities/clase.entity';
 import { Pais } from '../../places/entities/pais.entity';
 
-@Entity({ name: 'ESTUDIANTE' }) // Nombre de la tabla en la BD
+@Entity({ name: 'ESTUDIANTE' }) 
 export class Estudiante {
   @PrimaryGeneratedColumn({
     primaryKeyConstraintName: 'PK_ESTUDIANTE',
@@ -20,7 +20,7 @@ export class Estudiante {
 
   @Column({ type: 'nvarchar', length: 20, nullable: false, comment: 'Documento de identificación del Estudiante' })
   @Check('CK_DOC_IDENTIDAD_ESTUDIANTE', "DOC_IDENTIDAD='0' OR (ISNUMERIC(DOC_IDENTIDAD)=1 AND LEN(DOC_IDENTIDAD)>=6 AND LEN(DOC_IDENTIDAD)<=12)")
-  @Index('IX_DOC_IDENTIDAD_ESTUDIANTE', { unique: false }) // Índice no único
+  @Index('IX_DOC_IDENTIDAD_ESTUDIANTE', { unique: false }) 
   doc_identidad: string;
 
   @Column({ type: 'nvarchar', length: 50, nullable: false, comment: 'Nombre del Estudiante' })
