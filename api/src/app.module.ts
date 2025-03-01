@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CertificatesModule } from './certificates/certificates.module';
@@ -9,15 +10,22 @@ import { SurveysModule } from './surveys/surveys.module';
 import { PlacesModule } from './places/places.module';
 import { AuthModule } from './auth/auth.module';
 import { DatabasesModule } from './databases/databases.module';
-import { ConfigModule } from '@nestjs/config';
 import { environments } from './environments';
 import config from './config';
-import Joi from 'joi';
+import * as Joi from 'joi';
+
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('Joi:', Joi);
+console.log('Joi.object:', Joi.object);
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: environments[process.env.NODE_ENV] || '.dev.env',
+      envFilePath: [
+        `.env.${process.env.NODE_ENV}`, // Carga archivos tipo `.env.development`, `.env.production`, etc.
+        '.env.local', // Variables locales (si existen)
+        '.env', // Variables generales
+      ],
       load: [config],
       isGlobal: true,
       validationSchema: Joi.object({

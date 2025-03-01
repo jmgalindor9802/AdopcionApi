@@ -6,12 +6,8 @@ import { LocationController } from './controllers/location/location.controller';
 import { SalonService } from './services/salon/salon.service';
 import { LocationService } from './services/location/location.service';
 import { CountryService } from './services/country/country.service';
-import { Pais } from './entities/pais.entity';
-import { Salon } from './entities/salon.entity';
-import { Ubicacion } from './entities/ubicacion.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Salon, Ubicacion, Pais])],
   controllers: [CountryController, SalonController, LocationController],
   providers: [SalonService, LocationService, CountryService],
 })
