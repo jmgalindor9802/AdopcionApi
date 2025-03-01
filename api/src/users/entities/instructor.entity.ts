@@ -1,28 +1,35 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Grupo } from '../../classes/entities/grupo.entity';
 
-import { Grupo } from '../../curso/entities/grupo.entity';
-
-@Entity()
+@Entity({ name: 'INSTRUCTOR' })
 export class Instructor {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ name: 'PK_INSTRUCTOR', comment: 'Clave primaria del Instructor' })
   pk_instructor: number;
-  @Column({ type: 'nvarchar', length: 20 })
+
+  @Column({ name: 'DOC_IDENTIDAD', type: 'nvarchar', length: 20, unique: true, nullable: false, comment: 'Documento de identidad del Instructor' })
   doc_identidad: string;
-  @Column({ type: 'nvarchar', length: 50 })
+
+  @Column({ name: 'NOMBRE', type: 'nvarchar', length: 50, nullable: false, comment: 'Nombre del Instructor' })
   nombre: string;
-  @Column({ type: 'nvarchar', length: 50 })
+
+  @Column({ name: 'APELLIDO', type: 'nvarchar', length: 50, nullable: false, comment: 'Apellido del Instructor' })
   apellido: string;
-  @Column({ type: 'nvarchar', length: 100 })
+
+  @Column({ name: 'CORREO', type: 'nvarchar', length: 100, nullable: false, comment: 'Correo electrónico del Instructor' })
   correo: string;
-  @Column({ type: 'nvarchar', length: 60 })
+
+  @Column({ name: 'USUARIO', type: 'nvarchar', length: 60, nullable: false, comment: 'Nombre de usuario del Instructor' })
   usuario: string;
-  @Column({ type: 'nvarchar', length: 50, nullable: true })
-  num_contacto: string;
-  @Column({ type: 'nvarchar', length: 50 })
+
+  @Column({ name: 'ESTADO', type: 'nvarchar', length: 50, nullable: false, comment: 'Estado del Instructor' })
   estado: string;
-  @Column({ type: 'nvarchar', length: 50, nullable: true })
+
+  @Column({ name: 'TITULO', type: 'nvarchar', length: 50, nullable: true, comment: 'Título académico del Instructor' })
   titulo: string;
 
-  @OneToMany(() => Grupo, (grupo) => grupo.curso)
+  @Column({ name: 'NUM_CONTACTO', type: 'nvarchar', length: 50, nullable: true, comment: 'Número de contacto del Instructor' })
+  num_contacto: string;
+
+  @OneToMany(() => Grupo, (grupo) => grupo.instructor)
   grupos: Grupo[];
 }

@@ -75,4 +75,5 @@ export class Grupo {
 
   @OneToMany(() => Encuesta, (encuesta) => encuesta.grupo)
   encuestas: Encuesta[];
+
 }
