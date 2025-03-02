@@ -7,7 +7,7 @@ import { InstructorService } from './services/instructor/instructor.service';
 import { AdministratorService } from './services/administrator/administrator.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Estudiante } from './entities/estudiante.entity';
-import { PlacesModule } from 'src/places/places.module';
+import { PlacesModule } from './../places/places.module';
 import { Instructor } from './entities/instructor.entity';
 import { Administrador } from './entities/administrador.entity';
 

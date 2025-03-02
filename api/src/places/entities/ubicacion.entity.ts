@@ -21,7 +21,7 @@ export class Ubicacion {
   @ManyToOne(() => Pais, (pais) => pais.ubicaciones, { nullable: true })
   @JoinColumn({
     name: 'FK_PAIS',
-    referencedColumnName: 'pk_pais',
+    //referencedColumnName: 'PK_PAIS',
     foreignKeyConstraintName: 'FK_UBICACION_PAIS',
   })
   pais: Pais;

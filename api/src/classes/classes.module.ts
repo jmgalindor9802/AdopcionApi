@@ -10,13 +10,13 @@ import { ClasseService } from './services/classe/classe.service';
 import { CourseService } from './services/course/course.service';
 import { ScheduleService } from './services/schedule/schedule.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PlacesModule } from 'src/places/places.module';
+import { PlacesModule } from './../places/places.module';
 import { Clase } from './entities/clase.entity';
 import { Grupo } from './entities/grupo.entity';
 import { TipoGrupo } from './entities/tipoGrupo.entity';
 import { Horario } from './entities/horario.entity';
 import { Curso } from './entities/curso.entity';
-import { SurveysModule } from 'src/surveys/surveys.module';
+import { SurveysModule } from './../surveys/surveys.module';
 
 @Module({
   imports: [

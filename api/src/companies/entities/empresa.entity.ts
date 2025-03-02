@@ -32,7 +32,7 @@ export class Empresa {
   @ManyToOne(() => Sector, (sector) => sector.empresas)
   @JoinColumn({
     name: 'FK_SECTOR',
-    referencedColumnName: 'pk_sector',
+    //referencedColumnName: 'pk_sector',
     foreignKeyConstraintName: 'FK_EMPRESA_SECTOR',
   })
   sector: Sector;
@@ -40,7 +40,7 @@ export class Empresa {
   @ManyToOne(() => Pais, (pais) => pais.empresas)
   @JoinColumn({
     name: 'FK_PAIS',
-    referencedColumnName: 'pk_pais',
+    //referencedColumnName: 'PK_PAIS',
     foreignKeyConstraintName: 'FK_EMPRESA_PAIS',
   })
   pais: Pais;

@@ -12,7 +12,7 @@ import { Clase } from './clase.entity';
 import { Curso } from './curso.entity';
 import { Horario } from './horario.entity';
 import { Salon } from '../../places/entities/salon.entity';
-import { Encuesta } from 'src/surveys/entities/encuesta.entity';
+import { Encuesta } from '../../surveys/entities/encuesta.entity';
 import { TipoGrupo } from './tipoGrupo.entity';
 
 @Entity({ name: 'GRUPO' })
@@ -38,7 +38,6 @@ export class Grupo {
   @ManyToOne(() => Curso, (curso) => curso.grupos)
   @JoinColumn({
     name: 'FK_CURSO',
-    referencedColumnName: 'pk_curso',
     foreignKeyConstraintName: 'FK_GRUPO_CURSO',
   })
   curso: Curso;
@@ -46,7 +45,6 @@ export class Grupo {
   @ManyToOne(() => Salon, (salon) => salon.grupos)
   @JoinColumn({
     name: 'FK_SALON',
-    referencedColumnName: 'pk_salon',
     foreignKeyConstraintName: 'FK_GRUPO_SALON',
   })
   salon: Salon;
@@ -54,7 +52,6 @@ export class Grupo {
   @ManyToOne(() => Instructor, (instructor) => instructor.grupos)
   @JoinColumn({
     name: 'FK_INSTRUCTOR',
-    referencedColumnName: 'pk_instructor',
     foreignKeyConstraintName: 'FK_GRUPO_INSTRUCTOR',
   })
   instructor: Instructor;
@@ -62,7 +59,6 @@ export class Grupo {
   @ManyToOne(() => TipoGrupo, (tipoGrupo) => tipoGrupo.grupos)
   @JoinColumn({
     name: 'FK_TIPO_GRUPO',
-    referencedColumnName: 'pk_tipo_grupo',
     foreignKeyConstraintName: 'FK_GRUPO_TIPO_GRUPO',
   })
   tipo_grupo: TipoGrupo;
@@ -75,5 +71,4 @@ export class Grupo {
 
   @OneToMany(() => Encuesta, (encuesta) => encuesta.grupo)
   encuestas: Encuesta[];
-
 }

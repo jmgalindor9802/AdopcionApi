@@ -20,7 +20,7 @@ export class Certificado {
   @ManyToOne(() => Grupo, { nullable: false })
   @JoinColumn({
     name: 'FK_GRUPO',
-    referencedColumnName: 'pk_grupo', 
+    //referencedColumnName: 'PK_GRUPO', 
     foreignKeyConstraintName: 'FK_CERTIFICADO_GRUPO',
   })
   grupo: Grupo;
@@ -28,7 +28,7 @@ export class Certificado {
   @ManyToOne(() => Estudiante, { nullable: false })
   @JoinColumn({
     name: 'FK_ESTUDIANTE',
-    referencedColumnName: 'pk_estudiante', 
+    //referencedColumnName: 'PK_ESTUDIANTE', 
     foreignKeyConstraintName: 'FK_CERTIFICADO_ESTUDIANTE',
   })
   estudiante: Estudiante;

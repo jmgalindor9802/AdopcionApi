@@ -6,22 +6,15 @@ import { Pais } from '../../places/entities/pais.entity';
 
 @Entity({ name: 'CLASE' })
 export class Clase {
-  @PrimaryColumn({
-    name: 'PFK_ESTUDIANTE',
-    primaryKeyConstraintName: 'PK_CLASE',
-  })
+  @PrimaryColumn({ name: 'PFK_ESTUDIANTE' })
   pfk_estudiante: number;
 
-  @PrimaryColumn({
-    name: 'PFK_GRUPO',
-    primaryKeyConstraintName: 'PK_CLASE',
-  })
+  @PrimaryColumn({ name: 'PFK_GRUPO' })
   pfk_grupo: number;
 
   @ManyToOne(() => Estudiante, (estudiante) => estudiante.clases)
   @JoinColumn({
     name: 'PFK_ESTUDIANTE',
-    referencedColumnName: 'pk_estudiante',
     foreignKeyConstraintName: 'FK_CLASE_ESTUDIANTE',
   })
   estudiante: Estudiante;
@@ -29,7 +22,6 @@ export class Clase {
   @ManyToOne(() => Grupo, (grupo) => grupo.clases)
   @JoinColumn({
     name: 'PFK_GRUPO',
-    referencedColumnName: 'pk_grupo',
     foreignKeyConstraintName: 'FK_CLASE_GRUPO',
   })
   grupo: Grupo;
@@ -55,7 +47,6 @@ export class Clase {
   @ManyToOne(() => Empresa, (empresa) => empresa.clases)
   @JoinColumn({
     name: 'FK_EMPRESA',
-    referencedColumnName: 'pk_empresa',
     foreignKeyConstraintName: 'FK_CLASE_EMPRESA',
   })
   empresa: Empresa;
@@ -63,7 +54,6 @@ export class Clase {
   @ManyToOne(() => Pais, (pais) => pais.clases)
   @JoinColumn({
     name: 'FK_PAIS_ORDEN_VENTA',
-    referencedColumnName: 'pk_pais',
     foreignKeyConstraintName: 'FK_CLASE_PAIS',
   })
   pais_orden_venta: Pais;

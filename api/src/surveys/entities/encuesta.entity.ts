@@ -24,7 +24,7 @@ export class Encuesta {
   @ManyToOne(() => Pregunta, (pregunta) => pregunta.encuestas)
   @JoinColumn({
     name: 'FK_PREGUNTA',
-    referencedColumnName: 'pk_pregunta',
+    //referencedColumnName: 'PK_PREGUNTA',
     foreignKeyConstraintName: 'FK_ENCUESTA_PREGUNTA',
   })
   pregunta: Pregunta;
@@ -32,16 +32,16 @@ export class Encuesta {
   @ManyToOne(() => Grupo, (grupo) => grupo.encuestas)
   @JoinColumn({
     name: 'FK_GRUPO',
-    referencedColumnName: 'pk_grupo',
-    foreignKeyConstraintName: 'FK_ENCUESTA_CLASE',
+    //referencedColumnName: 'PK_GRUPO',
+    foreignKeyConstraintName: 'FK_ENCUESTA_GRUPO',
   })
   grupo: Grupo;
 
   @ManyToOne(() => Estudiante, (estudiante) => estudiante.encuestas)
   @JoinColumn({
     name: 'FK_ESTUDIANTE',
-    referencedColumnName: 'pk_estudiante',
-    foreignKeyConstraintName: 'FK_ENCUESTA_CLASE',
+    //referencedColumnName: 'PK_ESTUDIANTE',
+    foreignKeyConstraintName: 'FK_ENCUESTA_ESTUDIANTE',
   })
   estudiante: Estudiante;
 }
