@@ -2,12 +2,13 @@ import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { HttpExceptionFilter } from 'filters/http-exception.filter';
 
 async function bootstrap() {
   process.loadEnvFile();
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
-
+  app.useGlobalFilters(new HttpExceptionFilter()); 
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   app.useGlobalPipes(
     new ValidationPipe({
