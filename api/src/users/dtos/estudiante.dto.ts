@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsBoolean, IsEmail, IsEmpty, IsNotEmpty, IsString } from 'class-validator';
+import { IsBoolean, IsEmail, IsNotEmpty, IsNumber, IsString, Length, IsNumberString } from 'class-validator';
 
 export class CreateEstudianteDto {
   @IsString()
@@ -14,12 +14,14 @@ export class CreateEstudianteDto {
 
   @IsString()
   @IsNotEmpty()
+  @IsNumberString()
+  @Length(6, 12) 
   @ApiProperty()
   readonly doc_identidad: string;
 
   @IsString()
-  @ApiProperty()
   @IsNotEmpty()
+  @ApiProperty()
   readonly usuario: string;
 
   @IsString()
@@ -29,7 +31,7 @@ export class CreateEstudianteDto {
   readonly correo: string;
 
   @IsString()
-  @IsEmpty()
+  @IsNotEmpty()  
   @ApiProperty()
   readonly num_contacto: string;
 
@@ -37,6 +39,16 @@ export class CreateEstudianteDto {
   @IsNotEmpty()
   @ApiProperty()
   readonly registrado: boolean;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty()
+  readonly tipo_doc: string;  
+
+  @IsNumber()
+  @IsNotEmpty()
+  @ApiProperty()
+  readonly fk_pais: number;  
 }
 
 export class UpdateEstudianteDto extends PartialType(CreateEstudianteDto) {}

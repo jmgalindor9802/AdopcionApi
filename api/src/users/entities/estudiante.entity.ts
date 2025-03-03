@@ -3,6 +3,7 @@ import {
   Column, 
   Entity, 
   Index, 
+  JoinColumn, 
   ManyToOne, 
   OneToMany, 
   PrimaryGeneratedColumn 
@@ -47,8 +48,12 @@ export class Estudiante {
   tipo_doc: string;
 
   @ManyToOne(() => Pais, (pais) => pais.estudiantes, { nullable: false })
+  @JoinColumn({ name: 'FK_PAIS' }) 
+  pais: Pais;
+  
   @Column({ type: 'int', nullable: false, comment: 'Clave foránea a la tabla PAIS', name: 'FK_PAIS' })
   fk_pais: number;
+  
 
   @OneToMany(() => Clase, (clase) => clase.estudiante)
   clases: Clase[];

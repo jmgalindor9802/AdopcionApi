@@ -36,7 +36,7 @@ import { Pregunta } from './../surveys/entities/pregunta.entity';
               username: user,
               password,
               port,
-              dropSchema: true,
+              dropSchema: false,
               synchronize: true,
               autoLoadEntities: true,
               entities: [
