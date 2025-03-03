@@ -11,21 +11,34 @@ export class EstudianteService {
   ) {}
 
   //Iniciar sesión por usuario o correo
-  async login(usuario: string, correo: string): Promise<Estudiante | null> {
-    let estudiante = await this.estudianteRepository.findOne({ where: { usuario } });
-
-    if (!estudiante) {
-      estudiante = await this.estudianteRepository.findOne({ where: { correo } });
-    }
-
-    return estudiante || null;
+  async login(usuario: string, correo: string): Promise<any> {
+    const estudiante = await this.estudianteRepository
+      .createQueryBuilder('e')
+      .leftJoinAndSelect('e.pais', 'p') 
+      .select([
+        'e.pk_estudiante as pk_estudiante',
+        'e.doc_identidad as doc_identidad',
+        'e.nombre as nombre',
+        'e.apellido as apellido',
+        'e.correo as correo',
+        'e.usuario as usuario',
+        'e.num_contacto as num_contacto',
+        'e.tipo_doc as tipo_doc',
+        'p.nombre as pais'
+      ])
+      .where('e.usuario = :usuario', { usuario })
+      .orWhere('e.correo = :correo', { correo })
+      .getRawOne();
+  
+    return estudiante || [];
   }
-
+  
+  
   //Obtener datos del estudiante por usuario
   async obtenerPorUsuario(usuario: string): Promise<any> {
     const estudiante = await this.estudianteRepository
       .createQueryBuilder('e')
-      .leftJoin('e.pais', 'p')  // ✅ Usa 'e.pais' porque es la relación ManyToOne
+      .leftJoin('e.pais', 'p')  
       .select([
         'e.pk_estudiante AS pk_estudiante',
         'e.doc_identidad AS doc_identidad',
@@ -35,7 +48,7 @@ export class EstudianteService {
         'e.usuario AS usuario',
         'e.num_contacto AS num_contacto',
         'e.tipo_doc AS tipo_doc',
-        'p.nombre AS pais'  // ✅ Cambia 'p.nombre' a 'pais' en la respuesta
+        'p.nombre AS pais'  
       ])
       .where('e.usuario = :usuario', { usuario })
       .getRawOne();
@@ -43,7 +56,6 @@ export class EstudianteService {
     console.log('Estudiante encontrado:', estudiante);
     return estudiante;
   }
-  
   
 
   //Obtener clases de un estudiante

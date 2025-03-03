@@ -9,21 +9,28 @@ export class EstudianteController {
   constructor(private readonly estudianteService: EstudianteService) {}
 
   @Post('login')
-  @ApiOperation({ summary: 'Iniciar sesión con usuario o correo' })
-  @ApiBody({ 
-    schema: {
-      type: 'object',
-      properties: {
-        usuario: { type: 'string', example: 'juanperez' },
-        correo: { type: 'string', example: 'juan@example.com' },
-      },
-    },
-  })
-  @ApiResponse({ status: 200, description: 'Inicio de sesión exitoso' })
-  @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
-  async login(@Body() payload: { usuario: string; correo: string }) {
-    return this.estudianteService.login(payload.usuario, payload.correo);
+@ApiOperation({ summary: 'Iniciar sesión con usuario o correo' })
+@ApiBody({
+  schema: {
+    type: 'object',
+    properties: {
+      usuario: { type: 'string', example: 'juanperez' },
+      correo: { type: 'string', example: 'juan@example.com' }
+    }
   }
+})
+@ApiResponse({ status: 200, description: 'Inicio de sesión exitoso' })
+@ApiResponse({ status: 404, description: 'Usuario no encontrado' })
+async login(@Body() payload: { usuario: string; correo: string }) {
+  const estudiante = await this.estudianteService.login(payload.usuario, payload.correo);
+
+  if (estudiante.length === 0) {
+    return { mensaje: 'Usuario no encontrado' }; 
+  }
+
+  return estudiante;
+}
+
 
   @Get(':usuario')
   @ApiOperation({ summary: 'Obtener información de un estudiante por usuario' })
