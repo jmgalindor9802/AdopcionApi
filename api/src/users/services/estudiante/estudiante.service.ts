@@ -2,12 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Estudiante } from '../../entities/estudiante.entity';
+import { Clase } from 'classes/entities/clase.entity';
 
 @Injectable()
 export class EstudianteService {
   constructor(
     @InjectRepository(Estudiante)
     private readonly estudianteRepository: Repository<Estudiante>,
+
+    @InjectRepository(Clase)
+    private readonly claseRepository: Repository<Clase>,
   ) {}
 
   //Iniciar sesión por usuario o correo
@@ -59,13 +63,29 @@ export class EstudianteService {
   
 
   //Obtener clases de un estudiante
-  async obtenerClases(id: number) {
-    return this.estudianteRepository
-      .createQueryBuilder('estudiante')
-      .leftJoinAndSelect('estudiante.clases', 'clase')
-      .where('estudiante.id = :id', { id })
-      .getOne();
-  }
+async obtenerClases(id: number) {
+  const clases = await this.claseRepository
+    .createQueryBuilder('c')
+    .leftJoinAndSelect('c.estudiante', 'e')
+    .where('e.pk_estudiante = :id', { id })
+    .select([
+      'c.pfk_grupo', 
+      'c.estado_encuesta',
+      'c.estado_material',
+      'c.estado_certificado',
+    ])
+    .getMany();
+
+
+  return clases.map((clase) => ({
+    ...clase,
+    estado_material: clase.estado_material === 'Habilitado',
+    estado_encuesta: clase.estado_encuesta === 'Habilitado',
+    estado_certificado: clase.estado_certificado === 'Habilitado',
+  }));
+}
+
+
 
   //Registrar nuevo estudiante
   async registrarEstudiante(datos: Partial<Estudiante>): Promise<Estudiante> {

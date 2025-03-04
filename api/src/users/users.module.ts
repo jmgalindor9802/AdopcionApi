@@ -10,10 +10,12 @@ import { Estudiante } from './entities/estudiante.entity';
 import { PlacesModule } from './../places/places.module';
 import { Instructor } from './entities/instructor.entity';
 import { Administrador } from './entities/administrador.entity';
+import { ClassesModule } from './../classes/classes.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Estudiante, Instructor, Administrador]),
-    PlacesModule],
+    PlacesModule,
+    ClassesModule],
   controllers: [EstudianteController, InstructorController, AdministratorController],
   providers: [EstudianteService, InstructorService, AdministratorService]
 })

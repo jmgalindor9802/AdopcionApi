@@ -25,6 +25,7 @@ import { SurveysModule } from './../surveys/surveys.module';
     SurveysModule
   ],
   controllers: [GroupController, ClasseController, GroupTypeController, CourseController, ScheduleController],
-  providers: [GroupService, GroupTypeService, ClasseService, CourseService, ScheduleService]
+  providers: [GroupService, GroupTypeService, ClasseService, CourseService, ScheduleService],
+  exports: [TypeOrmModule.forFeature([Clase])], 
 })
 export class ClassesModule {}
