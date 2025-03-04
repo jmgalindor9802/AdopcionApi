@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Put, Param, Body, NotFoundException } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiNotFoundResponse, ApiParam, ApiOkResponse } from '@nestjs/swagger';
 import { EstudianteService } from '../../services/estudiante/estudiante.service';
 import { CreateEstudianteDto, UpdateEstudianteDto } from '../../dtos/estudiante.dto';
@@ -105,9 +105,14 @@ async obtenerPorUsuario(@Param('usuario') usuario: string) {
 }
 
   //OBTENER CLASES POR USUARIO
-  @Get('clases/:id')
-  @ApiOperation({ summary: 'Obtener clases de un estudiante' })
-  @ApiParam({ name: 'id', type: 'number', description: 'ID del estudiante' })
+  @Get('clases/:docIdentidad')
+  @ApiOperation({ summary: 'Obtener clases de un estudiante por documento de identidad' })
+  @ApiParam({
+    name: 'docIdentidad',
+    type: 'string',
+    description: 'Documento de identidad del estudiante',
+    example: '126784449',
+  })
   @ApiOkResponse({
     description: 'Lista de clases obtenida exitosamente',
     schema: {
@@ -115,10 +120,24 @@ async obtenerPorUsuario(@Param('usuario') usuario: string) {
       items: {
         type: 'object',
         properties: {
-          pfk_grupo: { type: 'number', example: 101 },
-          estado_encuesta: { type: 'boolean', example: true },
-          estado_material: { type: 'boolean', example: false },
-          estado_certificado: { type: 'boolean', example: true },
+          grupo_id: { type: 'number', example: 101 },
+          grupo_fecha_inicio: { type: 'string', format: 'date-time', example: '2025-03-01T05:00:00.000Z' },
+          grupo_fecha_fin: { type: 'string', format: 'date-time', example: '2025-06-01T05:00:00.000Z' },
+          clase_estado_encuesta: { type: 'boolean', example: true },
+          clase_estado_material: { type: 'boolean', example: false },
+          clase_estado_certificado: { type: 'boolean', example: true },
+          clase_fecha: { type: 'string', format: 'date-time', example: '2025-03-03T05:00:00.000Z' },
+          curso_nombre: { type: 'string', example: 'Introducción a la Programación' },
+          curso_intensidad: { type: 'number', example: 40 },
+          curso_sigla: { type: 'string', example: 'CS101' },
+          curso_categoria: { type: 'string', example: 'Informática' },
+          empresa_nombre: { type: 'string', example: 'Empresa A' },
+          salon_nombre: { type: 'string', example: 'Aula Magna' },
+          ubicacion_nombre: { type: 'string', example: 'Bogotá' },
+          salon_direccion: { type: 'string', example: 'Cl. 90 # 13-40' },
+          grupo_tipo: { type: 'string', example: 'Presencial' },
+          instructor_nombre: { type: 'string', example: 'Juan Manuel' },
+          instructor_apellido: { type: 'string', example: 'Angel Cuartas' },
         },
       },
     },
@@ -129,15 +148,16 @@ async obtenerPorUsuario(@Param('usuario') usuario: string) {
       example: { mensaje: 'No hay clases registradas para este estudiante' },
     },
   })
-  async obtenerClases(@Param('id') id: number) {
-    const clases = await this.estudianteService.obtenerClases(id);
+  async obtenerClases(@Param('docIdentidad') docIdentidad: string) {
+    const clases = await this.estudianteService.obtenerClases(docIdentidad);
   
-    if (!clases.length) {
-      return { mensaje: 'No hay clases registradas para este estudiante' };
+    if (!Array.isArray(clases) || clases.length === 0) {
+      throw new NotFoundException('No hay clases registradas para este estudiante');
     }
   
     return clases;
   }
+  
   
 
   @Post('nuevo')

@@ -62,28 +62,64 @@ export class EstudianteService {
   }
   
 
-  //Obtener clases de un estudiante
-async obtenerClases(id: number) {
-  const clases = await this.claseRepository
-    .createQueryBuilder('c')
-    .leftJoinAndSelect('c.estudiante', 'e')
-    .where('e.pk_estudiante = :id', { id })
-    .select([
-      'c.pfk_grupo', 
-      'c.estado_encuesta',
-      'c.estado_material',
-      'c.estado_certificado',
-    ])
-    .getMany();
-
-
-  return clases.map((clase) => ({
-    ...clase,
-    estado_material: clase.estado_material === 'Habilitado',
-    estado_encuesta: clase.estado_encuesta === 'Habilitado',
-    estado_certificado: clase.estado_certificado === 'Habilitado',
-  }));
-}
+  async obtenerClases(docIdentidad: string) {
+    const clases = await this.claseRepository
+      .createQueryBuilder('c')
+      .from('VIEW_CLASES_ESTUDIANTES', 'v')
+      .where('v.ESTUDIANTE_DOC_IDENTIDAD = :docIdentidad', { docIdentidad })
+      .select([
+        'v.GRUPO_ID as grupo_id',
+        'v.GRUPO_FECHA_INICIO as grupo_fecha_inicio',
+        'v.GRUPO_FECHA_FIN as grupo_fecha_fin',
+        'v.CLASE_ESTADO_ENCUESTA as clase_estado_encuesta',
+        'v.CLASE_ESTADO_CERTIFICADO as clase_estado_certificado',
+        'v.CLASE_ESTADO_MATERIAL as clase_estado_material',
+        'v.CLASE_FECHA as clase_fecha',
+        'v.CURSO_NOMBRE as curso_nombre',
+        'v.CURSO_ESTADO_MATERIAL as curso_estado_material',
+        'v.CURSO_INTENSIDAD as curso_intensidad',
+        'v.CURSO_ID as curso_id',
+        'v.CURSO_SIGLA as curso_sigla',
+        'v.CURSO_CATEGORIA as curso_categoria',
+        'v.EMPRESA_NOMBRE as empresa_nombre',
+        'v.SALON_NOMBRE as salon_nombre',
+        'v.UBICACION_NOMBRE as ubicacion_nombre',
+        'v.SALON_DIRECCION as salon_direccion',
+        'v.GRUPO_TIPO as grupo_tipo',
+        'v.INSTRUCTOR_NOMBRE as instructor_nombre',
+        'v.INSTRUCTOR_APELLIDO as instructor_apellido',
+      ])
+      .getRawMany();
+  
+    if (!clases.length) {
+      return { mensaje: 'No hay clases registradas para este estudiante' };
+    }
+  
+    return clases.map((clase) => ({
+      grupo_id: clase.grupo_id,
+      grupo_fecha_inicio: clase.grupo_fecha_inicio,
+      grupo_fecha_fin: clase.grupo_fecha_fin,
+      clase_estado_encuesta: clase.clase_estado_encuesta === 'Habilitado',
+      clase_estado_certificado: clase.clase_estado_certificado === 'Habilitado',
+      clase_estado_material: clase.clase_estado_material === 'Habilitado',
+      clase_fecha: clase.clase_fecha,
+      curso_nombre: clase.curso_nombre,
+      curso_estado_material: clase.curso_estado_material,
+      curso_intensidad: clase.curso_intensidad,
+      curso_id: clase.curso_id,
+      curso_sigla: clase.curso_sigla,
+      curso_categoria: clase.curso_categoria,
+      empresa_nombre: clase.empresa_nombre,
+      salon_nombre: clase.salon_nombre,
+      ubicacion_nombre: clase.ubicacion_nombre,
+      salon_direccion: clase.salon_direccion,
+      grupo_tipo: clase.grupo_tipo === 1 ? 'Presencial' : 'Virtual',
+      instructor_nombre: clase.instructor_nombre,
+      instructor_apellido: clase.instructor_apellido,
+    }));
+  }
+  
+  
 
 
 
