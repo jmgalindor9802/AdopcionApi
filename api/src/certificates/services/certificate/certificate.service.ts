@@ -1,13 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Certificado } from '../../entities/certificado.entity';
+import { Grupo } from 'classes/entities/grupo.entity';
+import { Estudiante } from 'users/entities/estudiante.entity';
 
 @Injectable()
 export class CertificadoService {
   constructor(
     @InjectRepository(Certificado)
     private readonly certificadoRepository: Repository<Certificado>,
+    @InjectRepository(Grupo)
+    private readonly grupoRepository: Repository<Grupo>,
+    @InjectRepository(Estudiante)
+    private readonly estudianteRepository: Repository<Estudiante>,
   ) {}
 
   async verificarCertificado(id: string, pk_grupo: number): Promise<any> {
@@ -66,6 +72,41 @@ export class CertificadoService {
         return certificado ? [certificado] : [];
     }
 
+  /**
+   * Registra un certificado verificando que el estudiante y grupo existen
+   * @param doc_estudiante Documento de identidad del estudiante
+   * @param fk_grupo Identificador del grupo
+   * @param fecha Fecha del certificado
+   * @returns `true` si la inserción fue exitosa
+   */
+  async registrarCertificado(doc_estudiante: string, fk_grupo: number, fecha: Date): Promise<boolean> {
+    // 🔍 1. Obtener el ID del estudiante a partir del documento
+    const estudiante = await this.estudianteRepository.findOne({
+      where: { doc_identidad: doc_estudiante },
+    });
 
+    if (!estudiante) {
+      throw new NotFoundException(`El estudiante con documento ${doc_estudiante} no existe`);
+    }
+
+    // 🔍 2. Verificar que el grupo existe
+    const grupo = await this.grupoRepository.findOne({ where: { pk_grupo: fk_grupo } });
+
+    if (!grupo) {
+      throw new NotFoundException(`El grupo con ID ${fk_grupo} no existe`);
+    }
+
+    // 🔹 3. Crear el certificado
+    const nuevoCertificado = this.certificadoRepository.create({
+      fecha,
+      estudiante,
+      grupo,
+    });
+
+    // 🔹 4. Guardar en la base de datos
+    await this.certificadoRepository.save(nuevoCertificado);
+
+    return true; // Devolver `true` como en Hapi.js
+  }
 }
 

@@ -1,6 +1,7 @@
-import { BadRequestException, Controller, Get, NotFoundException, Param } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, NotFoundException, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags, ApiParam } from '@nestjs/swagger';
 import { CertificadoService } from './../../services/certificate/certificate.service';
+import { RegistrarCertificadoDto } from 'certificates/dtos/certificado.dto';
 
 @ApiTags('Certificados')
 @Controller('estudiante/certificado')
@@ -84,5 +85,31 @@ export class CertificadoController {
 
     return certificado;
   }
+
+   /**
+   * Registra un certificado verificando que el estudiante y grupo existen
+   */
+   @Post()
+   @ApiOperation({ summary: 'Registrar certificado' })
+   @ApiResponse({ status: 201, description: 'Certificado registrado exitosamente', schema: { example: true } })
+   @ApiResponse({ 
+     status: 400, 
+     description: 'Error en la solicitud', 
+     schema: { 
+       example: { statusCode: 400, error: 'Bad Request', message: 'El estudiante con documento 126784449 no existe' } 
+     }
+   })
+   async registrarCertificado(@Body() datos: RegistrarCertificadoDto) {
+    try {
+      const { doc_estudiante, fk_grupo, fecha } = datos; // Extraer valores del DTO
+  
+      await this.certificadoService.registrarCertificado(doc_estudiante, fk_grupo, new Date(fecha)); // ✅ Ahora se pasan los 3 argumentos correctamente
+  
+      return true; // Devuelve true si todo está bien (igual que en Hapi.js)
+    } catch (error) {
+      throw new BadRequestException(error.message); // Devuelve error en el mismo formato que Hapi.js
+    }
+   }
+   
   
 }

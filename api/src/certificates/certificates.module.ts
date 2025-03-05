@@ -7,10 +7,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Grupo } from './../classes/entities/grupo.entity';
 import { Pais } from './../places/entities/pais.entity';
 import { Clase } from './../classes/entities/clase.entity';
+import { Estudiante } from 'users/entities/estudiante.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Certificado,Grupo,Pais, Clase]), 
+    TypeOrmModule.forFeature([Certificado,Grupo,Pais, Clase, Estudiante]), 
     ClassesModule, 
   ],
   controllers: [CertificadoController],
