@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Param, Body, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Put, Param, Body, NotFoundException, BadRequestException } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiNotFoundResponse, ApiParam, ApiOkResponse } from '@nestjs/swagger';
 import { EstudianteService } from '../../services/estudiante/estudiante.service';
 import { CreateEstudianteDto, UpdateEstudianteDto } from '../../dtos/estudiante.dto';
@@ -162,11 +162,43 @@ async obtenerPorUsuario(@Param('usuario') usuario: string) {
 
   @Post('nuevo')
   @ApiOperation({ summary: 'Registrar un nuevo estudiante' })
-  @ApiResponse({ status: 201, description: 'Estudiante registrado exitosamente' })
-  @ApiResponse({ status: 400, description: 'Datos inválidos' })
+  @ApiResponse({
+    status: 201,
+    description: 'Estudiante registrado exitosamente',
+    schema: {
+      example: {
+        PK_ESTUDIANTE: 2,
+        NOMBRE: "Juan",
+        APELLIDO: "Pérez",
+        FK_PAIS: 57,
+        TIPO_DOC: "CC",
+        DOC_IDENTIDAD: "987654321",
+        CORREO: "juanperez@example.com",
+        USUARIO: "juanperez",
+        NUM_CONTACTO: "3216549870",
+        REGISTRADO: true
+      }
+    }
+  })
+  @ApiResponse({
+    status: 200, // ✅ Respuesta con código 200 en lugar de 400 para "Documento ya registrado"
+    description: 'Documento ya registrado',
+    schema: {
+      example: {
+        message: "Documento ya se encuentra registrado",
+        data: {
+          PK_ESTUDIANTE: 1,
+          CORREO: "juan@example.com",
+          USUARIO: "juanperez"
+        }
+      }
+    }
+  })
   async registrarEstudiante(@Body() datos: CreateEstudianteDto) {
-    return this.estudianteService.registrarEstudiante(datos);
+    return await this.estudianteService.registrarEstudiante(datos);
   }
+  
+
 
   @Put(':id')
   @ApiOperation({ summary: 'Actualizar información de un estudiante' })

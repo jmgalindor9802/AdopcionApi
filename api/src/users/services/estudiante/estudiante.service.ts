@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { Estudiante } from '../../entities/estudiante.entity';
 import { Clase } from 'classes/entities/clase.entity';
 
@@ -119,15 +119,34 @@ export class EstudianteService {
     }));
   }
   
-  
-
-
 
   //Registrar nuevo estudiante
-  async registrarEstudiante(datos: Partial<Estudiante>): Promise<Estudiante> {
-    const nuevoEstudiante = this.estudianteRepository.create(datos);
-    return this.estudianteRepository.save(nuevoEstudiante);
+  async registrarEstudiante(datos: Partial<Estudiante>): Promise<any> {
+    return await this.estudianteRepository.manager.transaction(async (entityManager: EntityManager) => {
+      // 🔍 Verificar si el estudiante ya existe por documento de identidad
+      const estudianteExistente = await entityManager.findOne(Estudiante, {
+        where: { doc_identidad: datos.doc_identidad },
+      });
+
+      if (estudianteExistente) {
+        return {
+          message: `Documento ya se encuentra registrado`,
+          data: {
+            PK_ESTUDIANTE: estudianteExistente.pk_estudiante,
+            CORREO: estudianteExistente.correo,
+            USUARIO: estudianteExistente.usuario,
+          },
+        };
+      }
+
+      //Crear y guardar nuevo estudiante
+      const nuevoEstudiante = entityManager.create(Estudiante, datos);
+      await entityManager.save(nuevoEstudiante);
+
+      return nuevoEstudiante;
+    });
   }
+  
 
   //Actualizar datos de un estudiante
   async actualizarEstudiante(pk_estudiante: number, datos: Partial<Estudiante>): Promise<Estudiante | null> {
