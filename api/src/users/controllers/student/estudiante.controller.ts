@@ -202,9 +202,42 @@ async obtenerPorUsuario(@Param('usuario') usuario: string) {
 
   @Put(':id')
   @ApiOperation({ summary: 'Actualizar información de un estudiante' })
-  @ApiResponse({ status: 200, description: 'Estudiante actualizado exitosamente' })
-  @ApiResponse({ status: 404, description: 'Estudiante no encontrado' })
-  async actualizarEstudiante(@Param('id') id: number, @Body() datos: UpdateEstudianteDto) {
-    return this.estudianteService.actualizarEstudiante(id, datos);
+  @ApiParam({ name: 'id', type: 'number', example: 1, description: 'ID del estudiante a actualizar' })
+  @ApiResponse({
+    status: 200,
+    description: 'Estudiante actualizado exitosamente',
+    schema: {
+      example: {
+        message: "Estudiante actualizado correctamente",
+        data: {
+          pk_estudiante: 1,
+          nombre: "Juan",
+          apellido: "Pérez",
+          doc_identidad: "123456789",
+          correo: "juan@example.com",
+          usuario: "juanperez",
+          num_contacto: "3216549870",
+          registrado: true,
+          tipo_doc: "CC",
+          fk_pais: 57
+        }
+      }
+    }
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Estudiante no encontrado',
+    schema: {
+      example: { message: "El estudiante con ID 1 no existe." }
+    }
+  })
+  async actualizarEstudiante(@Param('id') id: string, @Body() datos: UpdateEstudianteDto) {
+    const resultado = await this.estudianteService.actualizarEstudiante(id.trim(), datos);
+  
+    if (!resultado.data) {
+      throw new NotFoundException(resultado);
+    }
+  
+    return resultado;
   }
-}
+}  

@@ -149,8 +149,21 @@ export class EstudianteService {
   
 
   //Actualizar datos de un estudiante
-  async actualizarEstudiante(pk_estudiante: number, datos: Partial<Estudiante>): Promise<Estudiante | null> {
-    await this.estudianteRepository.update({ pk_estudiante }, datos); 
-    return this.estudianteRepository.findOne({ where: { pk_estudiante } }); 
-  }  
+  async actualizarEstudiante(doc_identidad: string, datos: Partial<Estudiante>): Promise<any> {
+    // 🔍 Buscar estudiante por doc_identidad en lugar de pk_estudiante
+    const estudianteExistente = await this.estudianteRepository.findOne({ where: { doc_identidad } });
+  
+    if (!estudianteExistente) {
+      return { message: `El estudiante con documento ${doc_identidad} no existe.` };
+    }
+  
+    // 📝 Actualizar los datos del estudiante
+    await this.estudianteRepository.update({ doc_identidad }, datos);
+  
+    return {
+      message: 'Estudiante actualizado correctamente',
+      data: await this.estudianteRepository.findOne({ where: { doc_identidad } })
+    };
+  }
+  
 }
