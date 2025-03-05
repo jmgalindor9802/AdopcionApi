@@ -7,9 +7,10 @@ import { Encuesta } from './entities/encuesta.entity';
 import { Pregunta } from './entities/pregunta.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Clase } from 'classes/entities/clase.entity';
+import { Grupo } from 'classes/entities/grupo.entity';
 
 @Module({
-   imports: [TypeOrmModule.forFeature([Encuesta, Pregunta, Clase])],
+   imports: [TypeOrmModule.forFeature([Encuesta, Pregunta, Clase, Grupo])],
   controllers: [SurveyController, QuestionController],
   providers: [SurveyService, QuestionService]
 })
