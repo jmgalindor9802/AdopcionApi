@@ -40,4 +40,36 @@ export class QuestionController {
 
     return preguntas;
   }
+
+
+  @Get()
+  @ApiOperation({ summary: 'Obtener todas las preguntas habilitadas' })
+  @ApiResponse({
+    status: 200,
+    description: 'Preguntas encontradas',
+    schema: {
+      type: 'array',
+      example: [
+        { "PK_PREGUNTA": 1, "TIPO": "Selección Múltiple", "PREGUNTA": "¿Usa equipo de protección personal?", "CATEGORIA": "Seguridad" },
+        { "PK_PREGUNTA": 2, "TIPO": "Sí/No", "PREGUNTA": "¿Ha recibido capacitación en primeros auxilios?", "CATEGORIA": "Seguridad" },
+        { "PK_PREGUNTA": 3, "TIPO": "Texto", "PREGUNTA": "¿Cómo describiría las condiciones de su lugar de trabajo?", "CATEGORIA": "Seguridad" }
+      ],
+    }
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'No se encontraron preguntas habilitadas',
+    schema: {
+      example: { mensaje: 'No hay preguntas habilitadas en la base de datos' },
+    },
+  })
+  async obtenerTodasLasPreguntas() {
+    const preguntas = await this.questionService.obtenerTodasLasPreguntas();
+
+    if (!preguntas || preguntas.length === 0) {
+      throw new NotFoundException('No hay preguntas habilitadas en la base de datos');
+    }
+
+    return preguntas;
+  }
 }

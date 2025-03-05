@@ -21,4 +21,20 @@ export class QuestionService {
 
     return preguntas.length > 0 ? preguntas : [];
   }
+
+  async obtenerTodasLasPreguntas(): Promise<any[]> {
+    const preguntas = await this.preguntaRepository
+      .createQueryBuilder('p')
+      .select([
+        'p.pk_pregunta AS PK_PREGUNTA',
+        'p.tipo AS TIPO',
+        'p.pregunta AS PREGUNTA',
+        'p.categoria AS CATEGORIA',
+      ])
+      .where("p.estado = 'Habilitado'")
+      .orderBy('p.orden', 'ASC')
+      .getRawMany();
+
+    return preguntas.length > 0 ? preguntas : [];
+  }
 }
