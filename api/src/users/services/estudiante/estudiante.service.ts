@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import { Estudiante } from '../../entities/estudiante.entity';
@@ -150,14 +150,14 @@ export class EstudianteService {
 
   //Actualizar datos de un estudiante
   async actualizarEstudiante(doc_identidad: string, datos: Partial<Estudiante>): Promise<any> {
-    // 🔍 Buscar estudiante por doc_identidad en lugar de pk_estudiante
+    // Buscar estudiante por doc_identidad en lugar de pk_estudiante
     const estudianteExistente = await this.estudianteRepository.findOne({ where: { doc_identidad } });
   
     if (!estudianteExistente) {
       return { message: `El estudiante con documento ${doc_identidad} no existe.` };
     }
   
-    // 📝 Actualizar los datos del estudiante
+    // Actualizar los datos del estudiante
     await this.estudianteRepository.update({ doc_identidad }, datos);
   
     return {
@@ -165,5 +165,28 @@ export class EstudianteService {
       data: await this.estudianteRepository.findOne({ where: { doc_identidad } })
     };
   }
-  
+  /**
+  * Actualiza los datos del estudiante cuando es primer ingreso
+  * Cambia el campo `registrado` de 0 a 1.
+  * @param pk_estudiante - Identificador del estudiante en la base de datos
+  * @param datos - Datos a actualizar
+  * @returns Mensaje de éxito o error
+  */
+ async actualizarEstudianteNuevo(pk_estudiante: number, datos: Partial<Estudiante>): Promise<any> {
+   // Verificar si el estudiante existe
+   const estudiante = await this.estudianteRepository.findOne({ where: { pk_estudiante } });
+
+   if (!estudiante) {
+     throw new NotFoundException(`El estudiante con ID ${pk_estudiante} no existe.`);
+   }
+
+   // Actualizar el campo `registrado` a `true`
+   await this.estudianteRepository.update({ pk_estudiante }, { ...datos, registrado: true });
+
+   // Retornar el estudiante actualizado
+   return {
+     message: 'Estudiante registrado exitosamente',
+     data: await this.estudianteRepository.findOne({ where: { pk_estudiante } }),
+   };
+ }
 }

@@ -240,4 +240,52 @@ async obtenerPorUsuario(@Param('usuario') usuario: string) {
   
     return resultado;
   }
+
+  @Put('nuevo/:pk_estudiante')
+  @ApiOperation({ summary: 'Actualizar estudiante en su primer ingreso' })
+  @ApiParam({
+    name: 'pk_estudiante',
+    type: 'number',
+    description: 'ID del estudiante en la base de datos',
+    example: 123,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Estudiante actualizado correctamente',
+    schema: {
+      example: {
+        message: 'Estudiante registrado exitosamente',
+        data: {
+          pk_estudiante: 123,
+          nombre: 'Juan',
+          apellido: 'Pérez',
+          doc_identidad: '126784449',
+          correo: 'juan@example.com',
+          usuario: 'juanperez',
+          num_contacto: '3216549870',
+          registrado: true,
+          tipo_doc: 'CC',
+          fk_pais: 2,
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Estudiante no encontrado',
+    schema: {
+      example: { message: 'El estudiante con ID 123 no existe.' },
+    },
+  })
+  async actualizarEstudianteNuevo(
+    @Param('pk_estudiante') pk_estudiante: number,
+    @Body() datos: UpdateEstudianteDto
+  ) {
+    if (isNaN(pk_estudiante)) {
+      throw new BadRequestException('El ID del estudiante debe ser un número válido.');
+    }
+
+    return this.estudianteService.actualizarEstudianteNuevo(pk_estudiante, datos);
+  }
+
 }  
