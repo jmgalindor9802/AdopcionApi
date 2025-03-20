@@ -1,11 +1,15 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import * as dotenv from 'dotenv';
+import { ClassSerializerInterceptor, Logger, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { HttpExceptionFilter } from 'filters/http-exception.filter';
 
 async function bootstrap() {
-  process.loadEnvFile();
+
+  const Backend = new Logger("Puerto Backend")
+  const entorno = new Logger("Entorno de desarrollo")
+  dotenv.config();
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
   app.useGlobalFilters(new HttpExceptionFilter()); 
@@ -30,7 +34,7 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, document);
   await app.listen(process.env.PORT);
 
-  console.log(`Enviroment ${process.env.NODE_ENV}`);
-  console.log(`Servidor corriendo en puerto ${process.env.PORT}`);
+  entorno.log(`Enviroment ${process.env.NODE_ENV}`);
+  Backend.log(`Servidor corriendo en puerto ${process.env.PORT}`);
 }
 bootstrap();

@@ -17,19 +17,7 @@ export class Certificado {
   @Column({ type: 'date', nullable: false, comment: 'Fecha de expedición del certificado' })
   fecha: Date;
 
-  @ManyToOne(() => Grupo, { nullable: false })
-  @JoinColumn({
-    name: 'FK_GRUPO',
-    //referencedColumnName: 'PK_GRUPO', 
-    foreignKeyConstraintName: 'FK_CERTIFICADO_GRUPO',
-  })
-  grupo: Grupo;
+  
 
-  @ManyToOne(() => Estudiante, { nullable: false })
-  @JoinColumn({
-    name: 'FK_ESTUDIANTE',
-    //referencedColumnName: 'PK_ESTUDIANTE', 
-    foreignKeyConstraintName: 'FK_CERTIFICADO_ESTUDIANTE',
-  })
-  estudiante: Estudiante;
+  
 }

@@ -99,8 +99,6 @@ export class CertificadoService {
     // 🔹 3. Crear el certificado
     const nuevoCertificado = this.certificadoRepository.create({
       fecha,
-      estudiante,
-      grupo,
     });
 
     // 🔹 4. Guardar en la base de datos

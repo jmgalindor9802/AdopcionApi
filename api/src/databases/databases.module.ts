@@ -49,6 +49,7 @@ import { Pregunta } from './../surveys/entities/pregunta.entity';
               ],      
               extra: {
                 trustServerCertificate: true,
+                requestTimeout: 30000
               },
             };
           },

@@ -34,16 +34,16 @@ console.log(process.env);
 const source = new DataSource({
   type: 'mssql',
   host: process.env.SQL_SERVER || 'localhost',
-  database: process.env.SQL_DATABASE || 'Entrenamiento_Nest',
+  database: process.env.SQL_DATABASE || 'entrenamiento',
   username: process.env.SQL_USER || 'sa',
-  password: process.env.SQL_PASSWORD || 'password',
+  password: process.env.SQL_PASSWORD || 'Mauro123',
   port: parseInt(process.env.SQL_PORT, 10) || 1433,
   extra: {
     trustServerCertificate: true,
     encrypt: process.env.SQL_ENCRYPT === 'true', 
   },
   dropSchema: false,
-  synchronize: true,
+  synchronize: false,
   logging: true,
   entities: [
     Pais, Ubicacion, Sector,
@@ -53,7 +53,7 @@ const source = new DataSource({
     Clase, Horario,
     Certificado, Encuesta,Pregunta
   ],
-  migrations: [join(__dirname, 'databases', 'migrations', '*.ts')]
+  migrations: ['./src/migrations/*.ts'],
 });
 
 export default source;
