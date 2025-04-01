@@ -9,8 +9,13 @@ import { Encuesta } from './encuesta.entity';
 
 @Entity({ name: 'PREGUNTA' })
 @Check('CK_ESTADO_PREGUNTA', "ESTADO='Deshabilitado' OR ESTADO='Habilitado'")
+@Check(
+  'CK_CATEGORIA',
+  "CATEGORIA IN ('Instructor', 'Material', 'Entrenamiento general', 'Salon')"
+)
+@Check('CK_ORDEN_PREGUNTA', '[ORDEN] > 0')
 export class Pregunta {
-  @PrimaryGeneratedColumn({ name: 'PK_PREGUNTA', comment: 'Clave primaria de la Pregunta' })
+  @PrimaryGeneratedColumn({ name: 'PK_PREGUNTA', comment: 'Clave primaria de la Pregunta',primaryKeyConstraintName: 'PK_PREGUNTA' })
   pk_pregunta: number;
 
   @Column({ name: 'PREGUNTA', type: 'nvarchar', length: 'MAX', nullable: false, comment: 'Texto de la Pregunta' })

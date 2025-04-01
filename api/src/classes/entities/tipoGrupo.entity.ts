@@ -3,7 +3,7 @@ import { Grupo } from './grupo.entity';
 
 @Entity({ name: 'TIPO_GRUPO' })
 export class TipoGrupo {
-  @PrimaryGeneratedColumn({ name: 'PK_TIPO_GRUPO' })
+  @PrimaryGeneratedColumn({ name: 'PK_TIPO_GRUPO',primaryKeyConstraintName: 'PK_TIPO_GRUPO' })
   pk_tipo_grupo: number;
 
   @Column({ name: 'NOMBRE', type: 'nvarchar', length: 50, nullable: true })

@@ -12,7 +12,7 @@ import { Pais } from './pais.entity';
 
 @Entity({ name: 'UBICACION' })
 export class Ubicacion {
-  @PrimaryGeneratedColumn({ name: 'PK_UBICACION', comment: 'Clave primaria de la Ubicación' })
+  @PrimaryGeneratedColumn({ name: 'PK_UBICACION', comment: 'Clave primaria de la Ubicación',primaryKeyConstraintName: 'PK_UBICACION' })
   pk_ubicacion: number;
 
   @Column({ name: 'NOMBRE', type: 'nvarchar', length: 50, nullable: false, comment: 'Nombre de la Ubicación' })

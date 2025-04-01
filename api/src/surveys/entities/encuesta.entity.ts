@@ -9,10 +9,11 @@ import {
 import { Estudiante } from '../../users/entities/estudiante.entity';
 import { Grupo } from '../../classes/entities/grupo.entity';
 import { Pregunta } from './pregunta.entity';
+import { Clase } from '../../classes/entities/clase.entity';
 
 @Entity({ name: 'ENCUESTA' })
 export class Encuesta {
-  @PrimaryGeneratedColumn({ name: 'PK_ENCUESTA' })
+  @PrimaryGeneratedColumn({ name: 'PK_ENCUESTA',primaryKeyConstraintName: 'PK_ENCUESTA' })
   pk_encuesta: number;
 
   @Column({ name: 'RESPUESTA', type: 'nvarchar', length: 'MAX', nullable: false })
@@ -21,7 +22,13 @@ export class Encuesta {
   @Column({ name: 'FECHA', type: 'date', nullable: false })
   fecha: Date;
 
-  @ManyToOne(() => Pregunta, (pregunta) => pregunta.encuestas)
+  @Column({ name: 'FK_ESTUDIANTE', type: 'int', nullable: false })
+  fk_estudiante: number;
+
+  @Column({ name: 'FK_GRUPO', type: 'int', nullable: false })
+  fk_grupo: number;
+
+  @ManyToOne(() => Pregunta, (pregunta) => pregunta.encuestas, { nullable: false })
   @JoinColumn({
     name: 'FK_PREGUNTA',
     //referencedColumnName: 'PK_PREGUNTA',
@@ -29,19 +36,11 @@ export class Encuesta {
   })
   pregunta: Pregunta;
 
-  @ManyToOne(() => Grupo, (grupo) => grupo.encuestas)
-  @JoinColumn({
-    name: 'FK_GRUPO',
-    //referencedColumnName: 'PK_GRUPO',
-    foreignKeyConstraintName: 'FK_ENCUESTA_GRUPO',
-  })
-  grupo: Grupo;
+  @ManyToOne(() => Clase, { nullable: false, onDelete: 'CASCADE', onUpdate: 'CASCADE', })
+  @JoinColumn([
+    { name: 'FK_ESTUDIANTE', referencedColumnName: 'pfk_estudiante',foreignKeyConstraintName: 'FK_ENCUESTA_CLASE', },
+    { name: 'FK_GRUPO', referencedColumnName: 'pfk_grupo', },
+  ])
+  clase: Clase;
 
-  @ManyToOne(() => Estudiante, (estudiante) => estudiante.encuestas)
-  @JoinColumn({
-    name: 'FK_ESTUDIANTE',
-    //referencedColumnName: 'PK_ESTUDIANTE',
-    foreignKeyConstraintName: 'FK_ENCUESTA_ESTUDIANTE',
-  })
-  estudiante: Estudiante;
 }

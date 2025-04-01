@@ -1,6 +1,8 @@
 import {
+  Check,
   Column,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   OneToMany,
@@ -14,10 +16,16 @@ import { Horario } from './horario.entity';
 import { Salon } from '../../places/entities/salon.entity';
 import { Encuesta } from '../../surveys/entities/encuesta.entity';
 import { TipoGrupo } from './tipoGrupo.entity';
+import { Certificado } from '../../certificates/entities/certificado.entity';
 
+@Check('CK_ALCANCE', "[ALCANCE] = 'Abierto' OR [ALCANCE] = 'Privado'")
+@Check('CK_FECHA_INICIO_FIN', '[FECHA_FIN] >= [FECHA_INICIO]')
+@Index('IXFK_GRUPO_CURSO', ['fk_curso'])
+@Index('IXFK_GRUPO_INSTRUCTOR', ['fk_instructor'])
+@Index('IXFK_GRUPO_SALON', ['fk_salon'])
 @Entity({ name: 'GRUPO' })
 export class Grupo {
-  @PrimaryGeneratedColumn({ name: 'PK_GRUPO' })
+  @PrimaryGeneratedColumn({ name: 'PK_GRUPO',primaryKeyConstraintName: 'PK_GRUPO' })
   pk_grupo: number;
 
   @Column({ name: 'FECHA_INICIO', type: 'date', nullable: false })
@@ -35,7 +43,16 @@ export class Grupo {
   @Column({ name: 'INFORME', type: 'nvarchar', length: 'MAX', nullable: true })
   informe: string;
 
-  @ManyToOne(() => Curso, (curso) => curso.grupos)
+  @Column({ name: 'FK_INSTRUCTOR', type: 'int', nullable: true })
+  fk_instructor: number;
+
+  @Column({ name: 'FK_SALON', type: 'int', nullable: true })
+  fk_salon: number;
+
+  @Column({ name: 'FK_CURSO', type: 'int', nullable: false })
+  fk_curso: number;
+
+  @ManyToOne(() => Curso, (curso) => curso.grupos, { nullable:false })
   @JoinColumn({
     name: 'FK_CURSO',
     foreignKeyConstraintName: 'FK_GRUPO_CURSO',
@@ -69,6 +86,6 @@ export class Grupo {
   @OneToMany(() => Clase, (clase) => clase.grupo)
   clases: Clase[];
 
-  @OneToMany(() => Encuesta, (encuesta) => encuesta.grupo)
-  encuestas: Encuesta[];
+
+
 }

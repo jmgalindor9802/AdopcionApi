@@ -1,9 +1,17 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Check, Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Grupo } from './grupo.entity';
-
+@Index('IXAK_SIGLA',['sigla'],{ unique: true })
+@Check('CK_ESTADO_CURSO', "[ESTADO] = 'Deshabilitado' OR [ESTADO] = 'Habilitado'")
+@Check('CK_ESTADO_MATERIAL_CURSO', "[ESTADO_MATERIAL] = 'Deshabilitado' OR [ESTADO_MATERIAL] = 'Habilitado'")
+@Check('CK_IDIOMA', "[IDIOMA] = 'Inglés' OR [IDIOMA] = 'Español'")
+@Check('CK_INTENSIDAD', '[INTENSIDAD] > 0')
+@Check(
+  'CK_ORGANIZACION',
+  "[ORGANIZACION]='Esri Colombia' OR [ORGANIZACION]='Esri Panamá' OR [ORGANIZACION]='Esri Ecuador' OR [ORGANIZACION]='Esri Chile' OR [ORGANIZACION]='Esri Inc'"
+)
 @Entity({ name: 'CURSO' })
 export class Curso {
-  @PrimaryGeneratedColumn({ name: 'PK_CURSO' })
+  @PrimaryGeneratedColumn({ name: 'PK_CURSO',primaryKeyConstraintName: 'PK_CURSO' })
   pk_curso: number;
 
   @Column({ name: 'SIGLA', type: 'nvarchar', length: 50, nullable: false })
@@ -24,7 +32,7 @@ export class Curso {
   @Column({ name: 'FECHA_LANZAMIENTO', type: 'date', nullable: true })
   fecha_lanzamiento: Date;
 
-  @Column({ name: 'TIPO', type: 'nvarchar', length: 50, nullable: false })
+  @Column({ name: 'TIPO', type: 'nvarchar', length: 50, nullable: true })
   tipo: string;
 
   @Column({ name: 'IDIOMA', type: 'nvarchar', length: 50, nullable: true })

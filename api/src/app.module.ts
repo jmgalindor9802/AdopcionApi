@@ -22,9 +22,7 @@ console.log('Joi.object:', Joi.object);
   imports: [
     ConfigModule.forRoot({
       envFilePath: [
-        `.env.${process.env.NODE_ENV}`, // Carga archivos tipo `.env.development`, `.env.production`, etc.
-        '.env.local', // Variables locales (si existen)
-        '.env', // Variables generales
+        `.env.${process.env.NODE_ENV}`, 
       ],
       load: [config],
       isGlobal: true,

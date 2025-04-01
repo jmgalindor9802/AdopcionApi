@@ -2,7 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'ESRI_ACADEMY' })
 export class EsriAcademy {
-  @PrimaryGeneratedColumn({ name: 'PK_CURSO_VIRTUAL' })
+  @PrimaryGeneratedColumn({ name: 'PK_CURSO_VIRTUAL',primaryKeyConstraintName: 'PK_CURSO_VIRTUAL' })
   pk_curso_virtual: number;
 
   @Column({ name: 'CUSTOMER_NUMBER', type: 'int', nullable: true })

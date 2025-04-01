@@ -37,7 +37,7 @@ import { Pregunta } from './../surveys/entities/pregunta.entity';
               password,
               port,
               dropSchema: false,
-              synchronize: true,
+              synchronize: false,
               autoLoadEntities: true,
               entities: [
                 Pais, Ubicacion, Sector,
@@ -47,8 +47,11 @@ import { Pregunta } from './../surveys/entities/pregunta.entity';
                 Clase, Horario,
                 Certificado, Encuesta,Pregunta
               ],      
-              extra: {
-                trustServerCertificate: true,
+              options: {
+                encrypt: false, 
+                trustServerCertificate: true, 
+              },
+              extra: {            
                 requestTimeout: 30000
               },
             };

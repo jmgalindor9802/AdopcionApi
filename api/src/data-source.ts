@@ -22,8 +22,8 @@ import { Encuesta } from './surveys/entities/encuesta.entity';
 import { Pregunta } from './surveys/entities/pregunta.entity';
 
 // Asegurar que NODE_ENV tenga un valor por defecto
-const currentEnv = process.env.NODE_ENV || 'development';
-const envFile = environments[currentEnv] || '.env.development';
+const currentEnv = process.env.NODE_ENV ;
+const envFile = environments[currentEnv] ;
 
 // Cargar variables de entorno según NODE_ENV
 dotenv.config({ path: envFile });
@@ -33,14 +33,14 @@ console.log(process.env);
 
 const source = new DataSource({
   type: 'mssql',
-  host: process.env.SQL_SERVER || 'localhost',
-  database: process.env.SQL_DATABASE || 'entrenamiento',
-  username: process.env.SQL_USER || 'sa',
-  password: process.env.SQL_PASSWORD || 'Mauro123',
+  host: process.env.SQL_SERVER ,
+  database: process.env.SQL_DATABASE ,
+  username: process.env.SQL_USER ,
+  password: process.env.SQL_PASSWORD ,
   port: parseInt(process.env.SQL_PORT, 10) || 1433,
   extra: {
     trustServerCertificate: true,
-    encrypt: process.env.SQL_ENCRYPT === 'true', 
+    encrypt: process.env.SQL_ENCRYPT === 'false', 
   },
   dropSchema: false,
   synchronize: false,
@@ -53,7 +53,7 @@ const source = new DataSource({
     Clase, Horario,
     Certificado, Encuesta,Pregunta
   ],
-  migrations: ['./src/migrations/*.ts'],
+  migrations: ['./src/databases/migrations/*.ts'],
 });
 
 export default source;

@@ -6,6 +6,7 @@ import {
   OneToMany,
   JoinColumn,
   PrimaryGeneratedColumn,
+  Index,
 } from 'typeorm';
 
 import { Grupo } from '../../classes/entities/grupo.entity';
@@ -15,7 +16,7 @@ import { Ubicacion } from './ubicacion.entity';
 @Check('CK_ESTADO_SALON', `ESTADO = 'Deshabilitado' OR ESTADO = 'Habilitado'`)
 @Check('CK_CAPACIDAD', 'CAPACIDAD > 0')
 export class Salon {
-  @PrimaryGeneratedColumn({ name: 'PK_SALON', comment: 'Clave primaria del Salón' })
+  @PrimaryGeneratedColumn({ name: 'PK_SALON', comment: 'Clave primaria del Salón',primaryKeyConstraintName: 'PK_SALON' })
   pk_salon: number;
 
   @Column({ name: 'NOMBRE', type: 'nvarchar', length: 100, nullable: false, comment: 'Nombre del Salón' })
@@ -38,8 +39,9 @@ export class Salon {
 
   @Column({ name: 'CAPACIDAD', type: 'int', nullable: false, comment: 'Capacidad del Salón' })
   capacidad: number;
-
-  @ManyToOne(() => Ubicacion, (ubicacion) => ubicacion.salones)
+  
+  @Index('IXFK_SALON_UBICACION')
+  @ManyToOne(() => Ubicacion, (ubicacion) => ubicacion.salones,{nullable:false})
   @JoinColumn({
     name: 'FK_UBICACION',
     //referencedColumnName: 'PK_UBICACION',
