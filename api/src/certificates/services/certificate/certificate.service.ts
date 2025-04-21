@@ -19,9 +19,9 @@ export class CertificadoService {
   async verificarCertificado(id: string, pk_grupo: number): Promise<any> {
     const certificado = await this.certificadoRepository
       .createQueryBuilder('c')
-      .innerJoin('c.estudiante', 'e') 
-      .innerJoin('c.grupo', 'g')  //  Certificado → Grupo
-      .innerJoin('Clase', 'cl', 'cl.PFK_GRUPO = g.PK_GRUPO') //  Clase → Grupo
+      .innerJoin('c.clase', 'cl')
+      .innerJoin('cl.estudiante', 'e')
+      .innerJoin('cl.grupo', 'g')
       .innerJoin('cl.pais_orden_venta', 'p') //  Clase → Pais_orden_venta
       .innerJoin('g.salon', 's') //  Grupo → Salon
       .innerJoin('s.ubicacion', 'u') //  Salon → Ubicacion
@@ -63,8 +63,9 @@ export class CertificadoService {
         const certificado = await this.certificadoRepository
           .createQueryBuilder('c')
           .select(['c.pk_certificado AS PK_CERTIFICADO', 'c.fecha AS FECHA'])
-          .innerJoin('c.grupo', 'g')
-          .innerJoin('c.estudiante', 'e')
+          .innerJoin('c.clase', 'cl')
+          .innerJoin('cl.estudiante', 'e')
+          .innerJoin('cl.grupo', 'g')
           .where('e.doc_identidad = :id', { id })
           .andWhere('g.pk_grupo = :pk_grupo', { pk_grupo })
           .getRawOne();
@@ -80,7 +81,7 @@ export class CertificadoService {
    * @returns `true` si la inserción fue exitosa
    */
   async registrarCertificado(doc_estudiante: string, fk_grupo: number, fecha: Date): Promise<boolean> {
-    // 🔍 1. Obtener el ID del estudiante a partir del documento
+    //  1. Obtener el ID del estudiante a partir del documento
     const estudiante = await this.estudianteRepository.findOne({
       where: { doc_identidad: doc_estudiante },
     });
@@ -89,19 +90,19 @@ export class CertificadoService {
       throw new NotFoundException(`El estudiante con documento ${doc_estudiante} no existe`);
     }
 
-    // 🔍 2. Verificar que el grupo existe
+    //  2. Verificar que el grupo existe
     const grupo = await this.grupoRepository.findOne({ where: { pk_grupo: fk_grupo } });
 
     if (!grupo) {
       throw new NotFoundException(`El grupo con ID ${fk_grupo} no existe`);
     }
 
-    // 🔹 3. Crear el certificado
+    //  3. Crear el certificado
     const nuevoCertificado = this.certificadoRepository.create({
       fecha,
     });
 
-    // 🔹 4. Guardar en la base de datos
+    //  4. Guardar en la base de datos
     await this.certificadoRepository.save(nuevoCertificado);
 
     return true; // Devolver `true` como en Hapi.js

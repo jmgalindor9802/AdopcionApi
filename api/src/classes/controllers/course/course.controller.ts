@@ -1,11 +1,15 @@
-import { BadRequestException, Controller, Get, NotFoundException, Param } from '@nestjs/common';
+import { BadRequestException, Controller, Get, NotFoundException, Param, Res } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CourseService } from 'classes/services/course/course.service';
+import { Response } from 'express';
 
 @ApiTags('Cursos')
 @Controller('estudiante')
 export class CourseController {
-  constructor(private readonly courseService: CourseService) {}
+  constructor(
+    private readonly courseService: CourseService,
+    private readonly configService: ConfigService ) {}
 
   /**
    *  Obtener los cursos de Esri Academy de un estudiante
@@ -48,39 +52,31 @@ export class CourseController {
     return cursos;
   }
 
-  /**
-   **Obtiene los archivos de material disponibles para un curso basado en su sigla.
-   * @param sigla - Código del curso
-   * @returns Lista de nombres y URLs de descarga de los archivos
-   */
   @Get('material/:sigla')
-  @ApiOperation({ summary: 'Obtener material del curso por sigla' })
-  @ApiParam({ name: 'sigla', type: 'string', example: 'GIS101', description: 'Código del curso' })
+  @ApiOperation({ summary: 'Obtener URLs de descarga del material de un curso por sigla' })
+  @ApiParam({ name: 'sigla', type: 'string', example: 'ARC1', description: 'Código del curso' })
   @ApiResponse({
     status: 200,
-    description: 'Lista de archivos de material obtenidos exitosamente',
+    description: 'Lista de archivos disponibles para el curso',
     schema: {
-      type: 'object',
-      properties: {
-        curso: { type: 'string', example: 'GIS101' },
-        archivos: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              nombre: { type: 'string', example: 'Introduccion_GIS.pdf' },
-              url: { type: 'string', example: 'http://localhost:3000/material/GIS101/Introduccion_GIS.pdf' }
-            }
-          }
+      example: [
+        {
+          files_names: ["guia1.pdf", "guia2.pdf"],
+          files_url: [
+            "https://entrenamiento:Esrico123%2A@entrenamiento.esri.co/MaterialEntrenamiento/ARC1/guia1.pdf",
+            "https://entrenamiento:Esrico123%2A@entrenamiento.esri.co/MaterialEntrenamiento/ARC1/guia2.pdf"
+          ]
         }
-      }
+      ]
     }
   })
   @ApiResponse({
     status: 404,
-    description: 'No se encontraron materiales para el curso',
+    description: 'No se encontraron archivos de material para la sigla',
     schema: {
-      example: { message: 'No se encontraron materiales para el curso con sigla "GIS101"' }
+      example: {
+        message: 'No se encontraron materiales para el curso con sigla "ARC1"'
+      }
     }
   })
   async obtenerMaterialCurso(@Param('sigla') sigla: string) {
@@ -92,4 +88,5 @@ export class CourseController {
   }
 
 
+   
 }

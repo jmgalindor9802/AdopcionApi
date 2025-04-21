@@ -23,7 +23,8 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('API Entrenamiento Esri Nosa')
-    .addServer('https://entrenamientobeta.esri.co/api/')
+    //.addServer('https://entrenamientobeta.esri.co/api/')
+    .addServer('http://localhost:4000/')
     .setDescription(
       'Aplicación que provee los datos necesarios de la plataforma de entrenamiento',
     )

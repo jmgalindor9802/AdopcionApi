@@ -95,10 +95,12 @@ export class SurveyService {
         const nuevaEncuesta = this.encuestaRepository.create({
           respuesta: respuesta.respuesta,
           fecha: new Date(fecha),
+          fk_estudiante: fk_estudiante,
+          fk_grupo: fk_grupo,
           pregunta: preguntaExiste,
-          grupo: grupoExiste,
-          estudiante: estudianteExiste, //  se asegura que es un objeto válido
+          clase: estudianteEnGrupo, // este es el objeto Clase, que enlaza estudiante y grupo
         });
+        
 
         // Guardar usando save() que maneja relaciones correctamente
         await entityManager.save(nuevaEncuesta);
